@@ -1,103 +1,159 @@
+"use client";
+
 import Image from "next/image";
+import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import { motion, useScroll, useTransform, useAnimation } from "framer-motion";
+import { useEffect, useRef } from "react";
+
+// Animation Variants
+const fadeUp = (delay = 0) => ({
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { delay, duration: 0.6, ease: "easeOut" },
+  },
+});
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const controls = useAnimation();
+  const ref = useRef(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  // Scroll-based animations
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.05]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.85]);
+
+  useEffect(() => {
+    controls.start("visible");
+  }, [controls]);
+
+  const features = [
+    {
+      icon: "/globe.svg",
+      title: "Intelligent Conversations",
+      description:
+        "Engage in natural, meaningful conversations with our advanced AI system.",
+      delay: 0.2,
+    },
+    {
+      icon: "/window.svg",
+      title: "Secure & Private",
+      description:
+        "Your conversations are encrypted and your privacy is our top priority.",
+      delay: 0.4,
+    },
+    {
+      icon: "/file.svg",
+      title: "Always Available",
+      description:
+        "24/7 access to your AI companion whenever you need assistance.",
+      delay: 0.6,
+    },
+  ];
+
+  return (
+    <main
+      ref={ref}
+      className="min-h-screen bg-black text-white overflow-hidden"
+    >
+      {/* Background Glow Blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {[...Array(4)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full mix-blend-screen filter blur-3xl opacity-15"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 0.25, scale: 1 }}
+            transition={{ duration: 1.5, delay: i * 0.4 }}
+            style={{
+              width: 250 + i * 120,
+              height: 250 + i * 120,
+              background: `radial-gradient(circle, ${
+                i % 2 === 0 ? "oklch(0.704 0.14 182.503)" : "#3b82f6"
+              }, transparent)`,
+              left: `${15 + i * 20}%`,
+              top: `${10 + i * 15}%`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Hero Section */}
+      <div className="container mx-auto px-6 py-24 relative">
+        <motion.div
+          initial="hidden"
+          animate={controls}
+          style={{ y, scale, opacity }}
+          className="text-center"
+        >
+          <motion.h1
+            variants={fadeUp(0.1)}
+            className="text-5xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-[oklch(0.704_0.14_182.503)] via-sky-400 to-[oklch(0.704_0.14_182.503)] text-transparent bg-clip-text"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Welcome to ChatMate
+          </motion.h1>
+
+          <motion.p
+            variants={fadeUp(0.3)}
+            className="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto"
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            Your intelligent conversation companion. Connect, chat, and
+            collaborate with AI-powered assistance.
+          </motion.p>
+
+          {/* Auth Buttons */}
+          <motion.div
+            variants={fadeUp(0.5)}
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-20"
+          >
+            {/* Sign In */}
+            <SignInButton mode="modal">
+              <button className="px-8 py-3 bg-[oklch(0.704_0.14_182.503)] rounded-xl font-semibold hover:bg-[oklch(0.65_0.14_182.503)] transition-all duration-200 shadow-lg hover:shadow-[oklch(0.704_0.14_182.503)_0px_0px_20px]">
+                Sign In to Chat
+              </button>
+            </SignInButton>
+
+            {/* Sign Up */}
+            <SignUpButton mode="modal">
+              <button className="px-8 py-3 bg-transparent border-2 border-[oklch(0.704_0.14_182.503)] rounded-xl font-semibold hover:bg-[oklch(0.15_0.14_182.503)] transition-all duration-200">
+                Create Account
+              </button>
+            </SignUpButton>
+          </motion.div>
+
+          {/* Features Grid */}
+          <div className="grid md:grid-cols-3 gap-10 mt-16">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                variants={fadeUp(feature.delay)}
+                initial="hidden"
+                animate="visible"
+                className="p-8 rounded-2xl bg-[oklch(0.704_0.14_182.503)]/20 border border-[oklch(0.704_0.14_182.503)]/30 hover:bg-[oklch(0.704_0.14_182.503)]/30 hover:border-[oklch(0.704_0.14_182.503)] transition-all duration-500"
+              >
+                <div className="w-14 h-14 bg-[oklch(0.704_0.14_182.503)]/40 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                  <Image
+                    src={feature.icon}
+                    width={28}
+                    height={28}
+                    alt={feature.title}
+                  />
+                </div>
+                <h3 className="text-2xl font-semibold mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-300">{feature.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </main>
   );
 }
