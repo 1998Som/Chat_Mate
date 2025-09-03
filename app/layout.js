@@ -39,13 +39,13 @@ export default function RootLayout({ children }) {
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <SignedIn>
-            <Navbar />
+          
             <ChatBotWidget />
-            <Footer />
+            
           </SignedIn>
-          
+            <Navbar />
           {children}
-          
+          <Footer />
         </body>
       </html>
     </ClerkProvider>
