@@ -24,7 +24,7 @@ export default function ChatBotWidget() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/create/chatbot", {
+      const res = await fetch("/api/create-stream-token/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage.content }),

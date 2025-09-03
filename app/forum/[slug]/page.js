@@ -6,6 +6,20 @@ export default async function Page({ params }) {
   const user = await currentUser();
   const slug = (await params).slug;
 
+  if (!user) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-black text-white flex items-center justify-center p-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Authentication Required</h1>
+          <p className="text-gray-400">Please sign in to access the forum.</p>
+        </div>
+      </main>
+    );
+  }
+
+  // Get token from public metadata (try both possible keys)
+  const streamToken = user.publicMetadata?.streamToken || user.publicMetadata?.token;
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-black text-white flex items-center justify-center p-6">
       <div
@@ -40,9 +54,10 @@ export default async function Page({ params }) {
           <ChatForum
             slug={slug}
             clerkUser={{
-              id: user?.id,
-              name: user?.firstName,
-              token: user?.publicMetadata?.token,
+              id: user.id,
+              name: user.firstName || user.username || `User ${user.id.slice(-4)}`,
+              token: streamToken, // This might be undefined for new users
+              streamToken: streamToken, // Fallback key
             }}
           />
         </div>
