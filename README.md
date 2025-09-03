@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+🚀 Next.js Web App with AI Chatbot
 
-## Getting Started
+An interactive Next.js application featuring a sleek AI-powered chatbot assistant 🤖, modern UI animations, and real-time chat powered by Stream. Built with Clerk authentication and a custom TailwindCSS theme, this project demonstrates full-stack development skills with production-ready design and functionality.
 
-First, run the development server:
+✨ Features
 
-```bash
+⚡ Next.js 14 (App Router) for modern, scalable architecture
+
+🔐 Clerk Authentication → secure login & user management
+
+💬 Stream-powered real-time chat integration
+
+🤖 AI Chatbot assistant with animated, eye-catching UI
+
+🎨 Custom TailwindCSS theme with dark mode ready
+
+🎬 Framer Motion animations for smooth interactions
+
+📱 Fully responsive design (mobile + desktop)
+
+🧩 Clean, modular, recruiter-friendly codebase
+
+🛠️ Tech Stack
+
+Framework: Next.js, React
+
+Styling: TailwindCSS, Framer Motion
+
+Authentication: Clerk
+
+Chat: Stream (real-time messaging)
+
+AI: Custom API routes with chatbot integration
+
+🚀 Getting Started
+
+Clone the repo and install dependencies:
+
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+npm install
+
+
+Set up environment variables in .env.local:
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_key
+CLERK_SECRET_KEY=your_clerk_secret
+STREAM_API_KEY=your_stream_api_key
+STREAM_API_SECRET=your_stream_secret
+
+
+Run the dev server:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Now open http://localhost:3000
+ 🎉
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📌 Roadmap
 
-## Learn More
+ Add user profile system with Clerk
 
-To learn more about Next.js, take a look at the following resources:
+ Enhance chatbot with memory and context
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ Improve accessibility (a11y features)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+ Deploy to Vercel with CI/CD
 
-## Deploy on Vercel
+👤 Author
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Somesankar Santra
+🔗
+ • [LinkedIn](https://www.linkedin.com/in/somesankar-santra-3b811b222/)
+ • [GitHub](https://github.com/1998Som)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+⭐ Why This Project?
+
+This project highlights:
+✔️ Full-stack integration (Next.js + Clerk + Stream)
+✔️ Production-grade real-time chat with authentication
+✔️ Custom animated chatbot UI that recruiters instantly notice
+✔️ Clean, well-documented codebase for scalability
