@@ -30,7 +30,7 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
+      initial={false}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 500, damping: 10 }}
       className="bg-gradient-to-r from-[oklch(0.704_0.14_182.503)] via-[oklch(0.66_0.14_182.503)] to-[oklch(0.58_0.14_182.503)] text-white backdrop-blur-sm border-b border-white/10 sticky top-0 z-50"

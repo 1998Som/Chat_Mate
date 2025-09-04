@@ -82,15 +82,14 @@ function ChatForumInner({ apiKey, token, slug, user, userId }) {
 }
 
 const ChatForum = ({ clerkUser, slug }) => {
-  const apiKey = "fst4hpzqna7c";
   const userId = clerkUser.id;
   const userName = clerkUser.name;
-  const existingToken = clerkUser.token || clerkUser.streamToken;
 
   const [loading, setLoading] = useState(true);
-  const [finalToken, setFinalToken] = useState(existingToken || "");
+  const [finalToken, setFinalToken] = useState("");
+  const [finalApiKey, setFinalApiKey] = useState("");
   const [tokenError, setTokenError] = useState(false);
-  const [clientKey, setClientKey] = useState(apiKey);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const user = {
     id: userId,
@@ -98,22 +97,26 @@ const ChatForum = ({ clerkUser, slug }) => {
     image: `https://getstream.io/random_png/?name=${userName || "User"}`,
   };
 
+  // Always fetch fresh token and API key for every user
   useEffect(() => {
     let cancelled = false;
     async function ensureToken() {
       try {
-        if (!finalToken) {
-          console.warn("No token found, attempting to create one...");
-          const { token, apiKey: returnedKey } = await createStreamToken(userId);
-          if (!cancelled) {
-            setFinalToken(token);
-            if (returnedKey) setClientKey(returnedKey);
-            setTokenError(false);
-            console.log("✅ Token created successfully");
-          }
+        console.log("Fetching fresh token and API key for user:", userId);
+        const { token, apiKey } = await createStreamToken(userId);
+        if (!cancelled) {
+          setFinalToken(token);
+          setFinalApiKey(apiKey);
+          setTokenError(false);
+          setErrorMessage("");
+          console.log("✅ Token and API key fetched successfully");
         }
       } catch (err) {
-        if (!cancelled) setTokenError(true);
+        console.error("❌ Failed to fetch token:", err);
+        if (!cancelled) {
+          setTokenError(true);
+          setErrorMessage(err.message);
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -122,7 +125,7 @@ const ChatForum = ({ clerkUser, slug }) => {
     return () => {
       cancelled = true;
     };
-  }, [userId, existingToken]);
+  }, [userId]);
 
   if (loading) {
     return (
@@ -135,13 +138,16 @@ const ChatForum = ({ clerkUser, slug }) => {
     );
   }
 
-  if (tokenError || !finalToken) {
+  if (tokenError || !finalToken || !finalApiKey) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center p-6 bg-red-900/20 rounded-lg border border-red-500/30">
           <div className="text-red-400 text-4xl mb-4">⚠️</div>
           <h3 className="text-lg font-semibold text-red-400 mb-2">Chat Setup Error</h3>
-          <p className="text-gray-300 mb-4">Unable to initialize chat. This might happen with new accounts.</p>
+          <p className="text-gray-300 mb-2">Unable to initialize chat. This might happen with new accounts.</p>
+          {errorMessage && (
+            <p className="text-red-300 text-sm mb-4">{errorMessage}</p>
+          )}
           <button onClick={() => window.location.reload()} className="px-4 py-2 bg-[oklch(0.704_0.14_182.503)] text-white rounded-lg hover:bg-[oklch(0.65_0.14_182.503)] transition-colors">
             Refresh Page
           </button>
@@ -151,7 +157,7 @@ const ChatForum = ({ clerkUser, slug }) => {
   }
 
   return (
-    <ChatForumInner apiKey={clientKey} token={finalToken} slug={slug} user={user} userId={userId} />
+    <ChatForumInner apiKey={finalApiKey} token={finalToken} slug={slug} user={user} userId={userId} />
   );
 };
 
