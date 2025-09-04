@@ -1,7 +1,7 @@
 import { StreamChat } from "stream-chat";
 import { clerkClient } from "@clerk/nextjs/server";
 
-// Use the same key/secret pair as the client expects
+// Use the hardcoded key/secret pair that matches your Stream account
 const api_key = process.env.STREAM_API_KEY;
 const api_secret = process.env.STREAM_API_SECRET;
 
